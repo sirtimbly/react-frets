@@ -37,7 +37,6 @@ export const AppComponent: React.FunctionComponent<IProps> = (
       TextInput(registerField("Password")),
       LinkButton.primary.mt_4.h(
         {
-          key: "linkbutton",
           href: "#",
           onClick: () => {
             setShowList(!showList);
@@ -49,7 +48,6 @@ export const AppComponent: React.FunctionComponent<IProps> = (
     $.div.p_3.bgGray_300.borderGray_600.mt_3
       .show(showList)
       .h(
-        { key: "mylist" },
         $.ul.h(...map((val: string) => listItem.h({ key: val }, val))(fakeList))
       ),
     LinkButton.secondary.mt_2.show(showList).h(

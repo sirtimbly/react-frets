@@ -1,9 +1,9 @@
 module.exports = {
   theme: {
-    extend: {}
+    extend: {},
   },
   variants: {
-    pointerEvents: ["responsive", "hover", "focus"]
+    pointerEvents: ["responsive", "hover", "focus"],
   },
-  plugins: []
-}
+  plugins: [],
+};
