@@ -9601,6 +9601,22 @@ video {
   pointer-events: auto;
 }
 
+.hover\:pointer-events-none:hover {
+  pointer-events: none;
+}
+
+.hover\:pointer-events-auto:hover {
+  pointer-events: auto;
+}
+
+.focus\:pointer-events-none:focus {
+  pointer-events: none;
+}
+
+.focus\:pointer-events-auto:focus {
+  pointer-events: auto;
+}
+
 .static {
   position: static;
 }
@@ -20373,6 +20389,22 @@ video {
   }
 
   .sm\:pointer-events-auto {
+    pointer-events: auto;
+  }
+
+  .sm\:hover\:pointer-events-none:hover {
+    pointer-events: none;
+  }
+
+  .sm\:hover\:pointer-events-auto:hover {
+    pointer-events: auto;
+  }
+
+  .sm\:focus\:pointer-events-none:focus {
+    pointer-events: none;
+  }
+
+  .sm\:focus\:pointer-events-auto:focus {
     pointer-events: auto;
   }
 
@@ -31152,6 +31184,22 @@ video {
     pointer-events: auto;
   }
 
+  .md\:hover\:pointer-events-none:hover {
+    pointer-events: none;
+  }
+
+  .md\:hover\:pointer-events-auto:hover {
+    pointer-events: auto;
+  }
+
+  .md\:focus\:pointer-events-none:focus {
+    pointer-events: none;
+  }
+
+  .md\:focus\:pointer-events-auto:focus {
+    pointer-events: auto;
+  }
+
   .md\:static {
     position: static;
   }
@@ -41928,6 +41976,22 @@ video {
     pointer-events: auto;
   }
 
+  .lg\:hover\:pointer-events-none:hover {
+    pointer-events: none;
+  }
+
+  .lg\:hover\:pointer-events-auto:hover {
+    pointer-events: auto;
+  }
+
+  .lg\:focus\:pointer-events-none:focus {
+    pointer-events: none;
+  }
+
+  .lg\:focus\:pointer-events-auto:focus {
+    pointer-events: auto;
+  }
+
   .lg\:static {
     position: static;
   }
@@ -52701,6 +52765,22 @@ video {
   }
 
   .xl\:pointer-events-auto {
+    pointer-events: auto;
+  }
+
+  .xl\:hover\:pointer-events-none:hover {
+    pointer-events: none;
+  }
+
+  .xl\:hover\:pointer-events-auto:hover {
+    pointer-events: auto;
+  }
+
+  .xl\:focus\:pointer-events-none:focus {
+    pointer-events: none;
+  }
+
+  .xl\:focus\:pointer-events-auto:focus {
     pointer-events: auto;
   }
 
