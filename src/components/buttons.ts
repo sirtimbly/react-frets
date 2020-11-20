@@ -1,4 +1,4 @@
-import { $$ } from "~output-styles";
+import { $$ } from "../output-styles";
 import BaseStyles from "../output-styles";
 const tag = "a";
 const base = (node: BaseStyles) =>
