@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel src/index.html",
+    "build": "npm run styles && parcel build src/index.html",
     "styles": "tailwind build src/tailwind.css -o src/output.css && frets-styles-generator -r src/output.css"
   },
   "keywords": [],
