@@ -11,6 +11,9 @@ type hFn<T> = (
   children: Array<ReactNode | AllHTMLAttributes<T>>
 ) => ReactElement;
 
+export type BaseStyleArgs<T> = Array<
+  ReactElement | string | AllHTMLAttributes<T> | Props<T> | Boolean
+>
 export const e = React.createElement;
 
 export default class BaseStyles {
@@ -22,17 +25,19 @@ export default class BaseStyles {
   private readConditionIndex: number = 0;
   private classObjectMode: boolean = false;
 
-  constructor(selector: string) {
-    this.chain = new Array<string>();
-    if (selector.length > 0) {
-      this.chain.push(selector);
+   constructor(selector: string) {
+    this.chain = new Array<string>()
+    if (typeof selector === 'string') {
+      const parts = selector.split('.')
+      this.chain.push(...parts)
     }
-    return this;
+    return this
   }
+
 
   // The first element in the arguments might be a attributes object, or they might all be Nodes
   public h = <T>(
-    ...children: Array<ReactElement | string | AllHTMLAttributes<T> | Props<T>>
+    ...children: BaseStyleArgs<T>
   ): ReactElement => {
     const style = {
       display: this.overrideDisplayNone
@@ -55,7 +60,7 @@ export default class BaseStyles {
           style,
           ...(children[0] as HTMLAttributes<T>)
         },
-        ...(children.slice(1) as Array<ReactElement>)
+        ...(children.slice(1).filter(Boolean) as Array<ReactElement>)
       );
     }
     return e(
@@ -64,7 +69,7 @@ export default class BaseStyles {
         className: this.toString(),
         style
       },
-      ...(children as Array<ReactElement>)
+      ...(children.filter(Boolean) as Array<ReactElement>)
     );
   };
 
@@ -137,6 +142,13 @@ export default class BaseStyles {
     return new BaseStyles("textarea");
   }
 
+  public toSelector = (): string => {
+    if (this.chain.length === 1) {
+      return this.chain[0] || 'div'
+    }
+    return this.chain.join('.')
+  }
+
   public toString = (): string => {
     if (this.classObjectMode) {
       throw Error(
@@ -152,6 +164,15 @@ export default class BaseStyles {
   public $ = (className: string): BaseStyles => {
     return this.add(className);
   };
+
+  public addSelectors = (selector: string) => {
+    if (typeof selector === 'string') {
+      const parts = selector.split('.')
+      this.chain.push(...parts)
+    }
+    return this
+  }
+
 
   public add = (className: string | false): BaseStyles => {
     if (!className) return this;
@@ -1221,6 +1242,8 @@ get borderT() { return this.add("border-t"); }
 get borderR() { return this.add("border-r"); }
 get borderB() { return this.add("border-b"); }
 get borderL() { return this.add("border-l"); }
+get decorationSlice() { return this.add("decoration-slice"); }
+get decorationClone() { return this.add("decoration-clone"); }
 get boxBorder() { return this.add("box-border"); }
 get boxContent() { return this.add("box-content"); }
 get cursorAuto() { return this.add("cursor-auto"); }
@@ -1229,6 +1252,7 @@ get cursorPointer() { return this.add("cursor-pointer"); }
 get cursorWait() { return this.add("cursor-wait"); }
 get cursorText() { return this.add("cursor-text"); }
 get cursorMove() { return this.add("cursor-move"); }
+get cursorHelp() { return this.add("cursor-help"); }
 get cursorNotAllowed() { return this.add("cursor-not-allowed"); }
 get block() { return this.add("block"); }
 get inlineBlock() { return this.add("inline-block"); }
@@ -1236,6 +1260,7 @@ get inline() { return this.add("inline"); }
 get flex() { return this.add("flex"); }
 get inlineFlex() { return this.add("inline-flex"); }
 get table() { return this.add("table"); }
+get inlineTable() { return this.add("inline-table"); }
 get tableCaption() { return this.add("table-caption"); }
 get tableCell() { return this.add("table-cell"); }
 get tableColumn() { return this.add("table-column"); }
@@ -1248,6 +1273,7 @@ get flowRoot() { return this.add("flow-root"); }
 get grid() { return this.add("grid"); }
 get inlineGrid() { return this.add("inline-grid"); }
 get contents() { return this.add("contents"); }
+get listItem() { return this.add("list-item"); }
 get hidden() { return this.add("hidden"); }
 get flexRow() { return this.add("flex-row"); }
 get flexRowReverse() { return this.add("flex-row-reverse"); }
@@ -1256,7 +1282,6 @@ get flexColReverse() { return this.add("flex-col-reverse"); }
 get flexWrap() { return this.add("flex-wrap"); }
 get flexWrapReverse() { return this.add("flex-wrap-reverse"); }
 get flexNowrap() { return this.add("flex-nowrap"); }
-get placeItemsAuto() { return this.add("place-items-auto"); }
 get placeItemsStart() { return this.add("place-items-start"); }
 get placeItemsEnd() { return this.add("place-items-end"); }
 get placeItemsCenter() { return this.add("place-items-center"); }
@@ -1289,7 +1314,6 @@ get selfStart() { return this.add("self-start"); }
 get selfEnd() { return this.add("self-end"); }
 get selfCenter() { return this.add("self-center"); }
 get selfStretch() { return this.add("self-stretch"); }
-get justifyItemsAuto() { return this.add("justify-items-auto"); }
 get justifyItemsStart() { return this.add("justify-items-start"); }
 get justifyItemsEnd() { return this.add("justify-items-end"); }
 get justifyItemsCenter() { return this.add("justify-items-center"); }
@@ -2916,6 +2940,8 @@ get z_30() { return this.add("z-30"); }
 get z_40() { return this.add("z-40"); }
 get z_50() { return this.add("z-50"); }
 get zAuto() { return this.add("z-auto"); }
+get isolate() { return this.add("isolate"); }
+get isolationAuto() { return this.add("isolation-auto"); }
 get gap_0() { return this.add("gap-0"); }
 get gap_1() { return this.add("gap-1"); }
 get gap_2() { return this.add("gap-2"); }
@@ -3433,12 +3459,251 @@ get animateSpin() { return this.add("animate-spin"); }
 get animatePing() { return this.add("animate-ping"); }
 get animatePulse() { return this.add("animate-pulse"); }
 get animateBounce() { return this.add("animate-bounce"); }
+get mixBlendNormal() { return this.add("mix-blend-normal"); }
+get mixBlendMultiply() { return this.add("mix-blend-multiply"); }
+get mixBlendScreen() { return this.add("mix-blend-screen"); }
+get mixBlendOverlay() { return this.add("mix-blend-overlay"); }
+get mixBlendDarken() { return this.add("mix-blend-darken"); }
+get mixBlendLighten() { return this.add("mix-blend-lighten"); }
+get mixBlendColorDodge() { return this.add("mix-blend-color-dodge"); }
+get mixBlendColorBurn() { return this.add("mix-blend-color-burn"); }
+get mixBlendHardLight() { return this.add("mix-blend-hard-light"); }
+get mixBlendSoftLight() { return this.add("mix-blend-soft-light"); }
+get mixBlendDifference() { return this.add("mix-blend-difference"); }
+get mixBlendExclusion() { return this.add("mix-blend-exclusion"); }
+get mixBlendHue() { return this.add("mix-blend-hue"); }
+get mixBlendSaturation() { return this.add("mix-blend-saturation"); }
+get mixBlendColor() { return this.add("mix-blend-color"); }
+get mixBlendLuminosity() { return this.add("mix-blend-luminosity"); }
+get bgBlendNormal() { return this.add("bg-blend-normal"); }
+get bgBlendMultiply() { return this.add("bg-blend-multiply"); }
+get bgBlendScreen() { return this.add("bg-blend-screen"); }
+get bgBlendOverlay() { return this.add("bg-blend-overlay"); }
+get bgBlendDarken() { return this.add("bg-blend-darken"); }
+get bgBlendLighten() { return this.add("bg-blend-lighten"); }
+get bgBlendColorDodge() { return this.add("bg-blend-color-dodge"); }
+get bgBlendColorBurn() { return this.add("bg-blend-color-burn"); }
+get bgBlendHardLight() { return this.add("bg-blend-hard-light"); }
+get bgBlendSoftLight() { return this.add("bg-blend-soft-light"); }
+get bgBlendDifference() { return this.add("bg-blend-difference"); }
+get bgBlendExclusion() { return this.add("bg-blend-exclusion"); }
+get bgBlendHue() { return this.add("bg-blend-hue"); }
+get bgBlendSaturation() { return this.add("bg-blend-saturation"); }
+get bgBlendColor() { return this.add("bg-blend-color"); }
+get bgBlendLuminosity() { return this.add("bg-blend-luminosity"); }
+get filter() { return this.add("filter"); }
+get filterNone() { return this.add("filter-none"); }
+get blur_0() { return this.add("blur-0"); }
+get blurSm() { return this.add("blur-sm"); }
+get blur() { return this.add("blur"); }
+get blurMd() { return this.add("blur-md"); }
+get blurLg() { return this.add("blur-lg"); }
+get blurXl() { return this.add("blur-xl"); }
+get blur_2xl() { return this.add("blur-2xl"); }
+get blur_3xl() { return this.add("blur-3xl"); }
+get brightness_0() { return this.add("brightness-0"); }
+get brightness_50() { return this.add("brightness-50"); }
+get brightness_75() { return this.add("brightness-75"); }
+get brightness_90() { return this.add("brightness-90"); }
+get brightness_95() { return this.add("brightness-95"); }
+get brightness_100() { return this.add("brightness-100"); }
+get brightness_105() { return this.add("brightness-105"); }
+get brightness_110() { return this.add("brightness-110"); }
+get brightness_125() { return this.add("brightness-125"); }
+get brightness_150() { return this.add("brightness-150"); }
+get brightness_200() { return this.add("brightness-200"); }
+get contrast_0() { return this.add("contrast-0"); }
+get contrast_50() { return this.add("contrast-50"); }
+get contrast_75() { return this.add("contrast-75"); }
+get contrast_100() { return this.add("contrast-100"); }
+get contrast_125() { return this.add("contrast-125"); }
+get contrast_150() { return this.add("contrast-150"); }
+get contrast_200() { return this.add("contrast-200"); }
+get dropShadowSm() { return this.add("drop-shadow-sm"); }
+get dropShadow() { return this.add("drop-shadow"); }
+get dropShadowMd() { return this.add("drop-shadow-md"); }
+get dropShadowLg() { return this.add("drop-shadow-lg"); }
+get dropShadowXl() { return this.add("drop-shadow-xl"); }
+get dropShadow_2xl() { return this.add("drop-shadow-2xl"); }
+get dropShadowNone() { return this.add("drop-shadow-none"); }
+get grayscale_0() { return this.add("grayscale-0"); }
+get grayscale() { return this.add("grayscale"); }
+get hueRotate_0() { return this.add("hue-rotate-0"); }
+get hueRotate_15() { return this.add("hue-rotate-15"); }
+get hueRotate_30() { return this.add("hue-rotate-30"); }
+get hueRotate_60() { return this.add("hue-rotate-60"); }
+get hueRotate_90() { return this.add("hue-rotate-90"); }
+get hueRotate_180() { return this.add("hue-rotate-180"); }
+get invert_0() { return this.add("invert-0"); }
+get invert() { return this.add("invert"); }
+get saturate_0() { return this.add("saturate-0"); }
+get saturate_50() { return this.add("saturate-50"); }
+get saturate_100() { return this.add("saturate-100"); }
+get saturate_150() { return this.add("saturate-150"); }
+get saturate_200() { return this.add("saturate-200"); }
+get sepia_0() { return this.add("sepia-0"); }
+get sepia() { return this.add("sepia"); }
+get backdropFilter() { return this.add("backdrop-filter"); }
+get backdropFilterNone() { return this.add("backdrop-filter-none"); }
+get backdropBlur_0() { return this.add("backdrop-blur-0"); }
+get backdropBlurSm() { return this.add("backdrop-blur-sm"); }
+get backdropBlur() { return this.add("backdrop-blur"); }
+get backdropBlurMd() { return this.add("backdrop-blur-md"); }
+get backdropBlurLg() { return this.add("backdrop-blur-lg"); }
+get backdropBlurXl() { return this.add("backdrop-blur-xl"); }
+get backdropBlur_2xl() { return this.add("backdrop-blur-2xl"); }
+get backdropBlur_3xl() { return this.add("backdrop-blur-3xl"); }
+get backdropBrightness_0() { return this.add("backdrop-brightness-0"); }
+get backdropBrightness_50() { return this.add("backdrop-brightness-50"); }
+get backdropBrightness_75() { return this.add("backdrop-brightness-75"); }
+get backdropBrightness_90() { return this.add("backdrop-brightness-90"); }
+get backdropBrightness_95() { return this.add("backdrop-brightness-95"); }
+get backdropBrightness_100() { return this.add("backdrop-brightness-100"); }
+get backdropBrightness_105() { return this.add("backdrop-brightness-105"); }
+get backdropBrightness_110() { return this.add("backdrop-brightness-110"); }
+get backdropBrightness_125() { return this.add("backdrop-brightness-125"); }
+get backdropBrightness_150() { return this.add("backdrop-brightness-150"); }
+get backdropBrightness_200() { return this.add("backdrop-brightness-200"); }
+get backdropContrast_0() { return this.add("backdrop-contrast-0"); }
+get backdropContrast_50() { return this.add("backdrop-contrast-50"); }
+get backdropContrast_75() { return this.add("backdrop-contrast-75"); }
+get backdropContrast_100() { return this.add("backdrop-contrast-100"); }
+get backdropContrast_125() { return this.add("backdrop-contrast-125"); }
+get backdropContrast_150() { return this.add("backdrop-contrast-150"); }
+get backdropContrast_200() { return this.add("backdrop-contrast-200"); }
+get backdropGrayscale_0() { return this.add("backdrop-grayscale-0"); }
+get backdropGrayscale() { return this.add("backdrop-grayscale"); }
+get backdropHueRotate_0() { return this.add("backdrop-hue-rotate-0"); }
+get backdropHueRotate_15() { return this.add("backdrop-hue-rotate-15"); }
+get backdropHueRotate_30() { return this.add("backdrop-hue-rotate-30"); }
+get backdropHueRotate_60() { return this.add("backdrop-hue-rotate-60"); }
+get backdropHueRotate_90() { return this.add("backdrop-hue-rotate-90"); }
+get backdropHueRotate_180() { return this.add("backdrop-hue-rotate-180"); }
+get backdropInvert_0() { return this.add("backdrop-invert-0"); }
+get backdropInvert() { return this.add("backdrop-invert"); }
+get backdropOpacity_0() { return this.add("backdrop-opacity-0"); }
+get backdropOpacity_5() { return this.add("backdrop-opacity-5"); }
+get backdropOpacity_10() { return this.add("backdrop-opacity-10"); }
+get backdropOpacity_20() { return this.add("backdrop-opacity-20"); }
+get backdropOpacity_25() { return this.add("backdrop-opacity-25"); }
+get backdropOpacity_30() { return this.add("backdrop-opacity-30"); }
+get backdropOpacity_40() { return this.add("backdrop-opacity-40"); }
+get backdropOpacity_50() { return this.add("backdrop-opacity-50"); }
+get backdropOpacity_60() { return this.add("backdrop-opacity-60"); }
+get backdropOpacity_70() { return this.add("backdrop-opacity-70"); }
+get backdropOpacity_75() { return this.add("backdrop-opacity-75"); }
+get backdropOpacity_80() { return this.add("backdrop-opacity-80"); }
+get backdropOpacity_90() { return this.add("backdrop-opacity-90"); }
+get backdropOpacity_95() { return this.add("backdrop-opacity-95"); }
+get backdropOpacity_100() { return this.add("backdrop-opacity-100"); }
+get backdropSaturate_0() { return this.add("backdrop-saturate-0"); }
+get backdropSaturate_50() { return this.add("backdrop-saturate-50"); }
+get backdropSaturate_100() { return this.add("backdrop-saturate-100"); }
+get backdropSaturate_150() { return this.add("backdrop-saturate-150"); }
+get backdropSaturate_200() { return this.add("backdrop-saturate-200"); }
+get backdropSepia_0() { return this.add("backdrop-sepia-0"); }
+get backdropSepia() { return this.add("backdrop-sepia"); }
+get rowX() { return this.add("row-x"); }
+get outerGrid() { return this.add("outer-grid"); }
 
+
+  public injectProps<T>(props: HTMLAttributes<T>) {
+    const oldFn = this.h
+    const newFn = (...children: BaseStyleArgs<T>) => {
+      const firstChild = children[0]
+      const firstChildIsProps = Boolean(
+        firstChild &&
+          typeof firstChild === 'object' &&
+          !Array.isArray(children[0]) &&
+          !(children[0] as ReactElement).type
+      )
+      // const hyperScriptFnArgs: BaseStyleArgs<T> = [props, ...children]
+      const hyperScriptFnArgs: BaseStyleArgs<T> = firstChildIsProps
+        ? [
+            {
+              ...(props as HTMLAttributes<T>),
+              ...(firstChild as HTMLAttributes<T>),
+            },
+            ...children.slice(1),
+          ]
+        : [{ ...props }, ...children]
+      return oldFn(...hyperScriptFnArgs)
+    }
+    this.h = newFn as typeof oldFn
+    return this
+  }
+
+  public beforeClick<T>(handler: <T>(e: React.MouseEvent<T>) => void) {
+    const oldFn = this.h
+    this.h = <T>(...children: BaseStyleArgs<T>) => {
+      const firstChild = children[0]
+      const firstChildIsProps = Boolean(
+        firstChild &&
+          typeof firstChild === 'object' &&
+          !Array.isArray(children[0]) &&
+          !(children[0] as ReactElement).type
+      )
+
+      let newClick
+      if (
+        firstChildIsProps &&
+        (firstChild as React.AllHTMLAttributes<T>).onClick
+      ) {
+        newClick = (firstChild as React.AllHTMLAttributes<T>).onClick
+      }
+      const clickProps: Partial<
+        AllHTMLAttributes<T> | React.ClassAttributes<T>
+      > = {
+        onClick: (evt) => {
+          handler(evt)
+          if (newClick) {
+            newClick(evt)
+          }
+        },
+      }
+      const hyperScriptFnArgs = firstChildIsProps
+        ? [
+            {
+              firstChild,
+              ...clickProps,
+            },
+            ...children.slice(1),
+          ]
+        : [{ ...clickProps }, ...children]
+      return oldFn(...hyperScriptFnArgs)
+    }
+    return this
+  }
 }
 
-export const $$ = (selector?: string): BaseStyles =>  {
-    return new BaseStyles("" + selector || "");
-};
+export const $$ = (selector?: string): BaseStyles => {
+  return new BaseStyles('' + selector || '')
+}
+export function $onClick<T>(fn: React.MouseEventHandler<T>) {
+  return (child: BaseStyles, ...children: BaseStyleArgs<T>) => {
+    const firstChild = children[0]
+    const firstChildIsProps = Boolean(
+      firstChild &&
+        typeof firstChild === 'object' &&
+        !Array.isArray(children[0]) &&
+        !(children[0] as ReactElement).type
+    )
+    return firstChildIsProps
+      ? child.h(
+          { ...(firstChild as React.AllHTMLAttributes<T>), onClick: fn },
+          ...children.slice(1)
+        )
+      : child.h({ onClick: fn }, ...children)
+  }
+}
 
-export const $ = $$();
+export function $formOnSubmit<T>(fn: (e?: React.FormEvent<any>) => void) {
+  return $$('form').injectProps({
+    onSubmit: (e) => {
+      e.preventDefault()
+      fn(e)
+    },
+  })
+}
+export const $ = $$()
 
