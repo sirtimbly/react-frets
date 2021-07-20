@@ -32,7 +32,7 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
   console.log('🚀 rendering the app component')
   return $.div.flex.flexCol.h(
     $.header.textCenter.textGray_600.text_2xl.h(props.fancyName),
-    $Panel.light.maxWMd.selfCenter
+    $Panel.light.maxWMd.shadowLg.selfCenter
       .hide(showList)
       .h(
         $formOnSubmit(() =>
@@ -50,7 +50,7 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
           .show(showList)
           .h(
             Row(
-              $.span.textLg.fontBold.h('Items'),
+              $.span.textLg.fontBold.h('List of Random Stuff'),
               Row(
                 $onClick(() => setFakeList([]))($Btn.secondary, 'Clear'),
                 $onClick(() =>

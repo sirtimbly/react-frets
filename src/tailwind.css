@@ -39,13 +39,13 @@ html {
 }
 
 .content {
-  @apply text-gray-800
+  @apply text-gray-900
 }
 
 .content h1 {
-  @apply text-2xl
+  @apply text-3xl
 }
 
 .content h2 {
-  @apply text-xl
+  @apply text-2xl
 }

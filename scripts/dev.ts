@@ -1,37 +1,37 @@
 #!/usr/bin/env node
 import { build, cliopts, scandir, file, watch, basename } from 'estrella'
-import { readFile } from 'frets-styles-generator'
+
 import liveServer from 'live-server'
-import path from 'path'
-import postcss from 'postcss'
 
-function subdir(name) {
-  return path.join(__dirname, '../' + name) //assume we are in scripts dir
-}
+import { runPostcss, runFretsStylesGenerator, subdir } from './helpers'
 
-const [ opts, args ] = cliopts.parse(
-  ["p, production" , "Creates a production build."],
+const [opts] = cliopts.parse(
+  ['p, production', 'Creates a production build.'],
+  ['o, outdir', 'Output directory, defaults to `build/`'],
+  ['s, sourcedir', 'Output directory, defaults to `src/`'],
+  ['t, staticdir', 'Static file directory, defaults to `static/`']
 )
-const src = subdir('src/')
-const output = subdir('build/')
-const staticDir = subdir('static/')
+const src = subdir(opts.sourcedir || 'src/')
+const output = subdir(opts.outdir || 'build/')
+const staticDir = subdir(opts.staticdir || 'static/')
 const cssFilter = /\.css$/i
 const htmlFilter = /\.html$/i
+const buildOpts = {
+  entry: src + 'index.ts',
+  outfile: output + 'index.js',
+  bundle: true,
+}
 
 if (opts.production) {
   build({
-    entry: src + 'index.ts',
-    outfile: output + 'index.js',
+    ...buildOpts,
     debug: false,
-    bundle: true,
     minify: true,
   })
 } else {
   build({
-    entry: src + 'index.ts',
-    outfile: output + 'index.js',
+    ...buildOpts,
     debug: true,
-    bundle: true,
     sourcemap: true,
     minify: false,
   })
@@ -42,39 +42,21 @@ function copyToOutputFrom(srcDir: string = src) {
     file.copy(srcDir + filename, output + basename(filename))
 }
 
-function processFSG(filename) {
-  readFile(filename, src + basename(filename, '.css') + '-styles.ts', {
-    templatePath:
-      subdir('node_modules/frets-styles-generator/build/main/templates/') +
-      'react.js',
-    overwrite: false,
-    inputPath: src,
-    customPlugins: [require('tailwindcss')],
-  })
-  postcss([require('tailwindcss')])
-    .process(file.readSync(filename), {
-      from: filename,
-      to: output + basename(filename),
-    })
-    .then((result) => {
-      file.writeSync(output + basename(filename), result.css)
-      if (result.map) {
-        file.writeSync(
-          output + basename(filename) + '.map',
-          result.map.toString()
-        )
-      }
-    })
+function processStylesheet(filename) {
+  // send through frets-styles-generator first
+  runFretsStylesGenerator(filename, src)
+  // output the final css file
+  runPostcss(filename, output, opts.production)
 }
 
-scandir(staticDir, htmlFilter).then((files) => {
-  console.log('🎸 Copy HTML', files)
+scandir(staticDir).then((files) => {
+  console.log('🎸 Copy Static files')
   files.map(copyToOutputFrom(staticDir))
 })
 
 scandir(src, cssFilter).then((files) => {
   console.log('🎸 Process CSS with Postcss and Frets Styles Generator', files)
-  files.map((file) => processFSG(src + file))
+  files.map((file) => processStylesheet(src + file))
 })
 
 if (cliopts.watch) {
@@ -82,7 +64,11 @@ if (cliopts.watch) {
 
   watch(src, { filter: cssFilter }, (changes) => {
     console.log('🎸 CSS File modified')
-    changes.map((c) => processFSG(c.name))
+    changes.map((c) => {
+      if (c.type === 'add' || c.type === 'change') {
+        processStylesheet(c.name)
+      }
+    })
   })
 
   liveServer.start({
