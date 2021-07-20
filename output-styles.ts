@@ -2,7 +2,6 @@
 import React, {
   ReactNode,
   ReactElement,
-  HTMLAttributes,
   AllHTMLAttributes,
   Props
 } from "react";
@@ -58,7 +57,7 @@ export default class BaseStyles {
         {
           className: this.toString(),
           style,
-          ...(children[0] as HTMLAttributes<T>)
+          ...(children[0] as AllHTMLAttributes<T>)
         },
         ...(children.slice(1).filter(Boolean) as Array<ReactElement>)
       );
@@ -3607,7 +3606,7 @@ get rowX() { return this.add("row-x"); }
 get outerGrid() { return this.add("outer-grid"); }
 
 
-  public injectProps<T>(props: HTMLAttributes<T>) {
+  public injectProps<T>(props: AllHTMLAttributes<T>) {
     const oldFn = this.h
     const newFn = (...children: BaseStyleArgs<T>) => {
       const firstChild = children[0]
@@ -3621,8 +3620,8 @@ get outerGrid() { return this.add("outer-grid"); }
       const hyperScriptFnArgs: BaseStyleArgs<T> = firstChildIsProps
         ? [
             {
-              ...(props as HTMLAttributes<T>),
-              ...(firstChild as HTMLAttributes<T>),
+              ...(props as AllHTMLAttributes<T>),
+              ...(firstChild as AllHTMLAttributes<T>),
             },
             ...children.slice(1),
           ]

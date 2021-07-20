@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState, ReactElement } from 'react'
 import { map, random, uniqueId, head, tail } from 'lodash/fp'
-import { $, $$, e, $onClick, $formOnSubmit } from './output-styles'
+import { $, $$, e, $onClick, $formOnSubmit } from './tailwind-styles'
 import { $Btn, $Button, $LinkBtn } from './components/buttons'
 import { TextInput } from './components/input'
 
@@ -12,7 +12,7 @@ interface AppProps extends PropsWithChildren<any> {
   isVisible: boolean
 }
 
-const listItem = $$().div.mr_2.mb_2.bgYellow_500.textGray_900.p_2.text_2xl
+const listItem = $$().div.mr_2.mb_2.bgYellow_700.textWhite.p_2.text_2xl
 const toListItem = (val: string) => listItem.h({ key: uniqueId(val) }, val)
 
 export const app: React.FunctionComponent<AppProps> = (props) => {
@@ -29,15 +29,15 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
       validationErrors: [],
     }
   }
-
+  console.log('🚀 rendering the app component')
   return $.div.flex.flexCol.h(
-    $.header.textCenter.textLg.h(props.fancyName),
-    $Panel.light.maxWMd.selfCenter.w_1_2
+    $.header.textCenter.textGray_600.text_2xl.h(props.fancyName),
+    $Panel.light.maxWMd.selfCenter
       .hide(showList)
       .h(
         $formOnSubmit(() =>
           setShowList(true)
-        ).flex.flexCol.itemsStretch.textBlue_500.h(
+        ).flex.flexCol.itemsStretch.textGray_500.h(
           TextInput(registerField('Username')),
           TextInput(registerField('Password')),
           $Btn.primary.mt_2.h('Log In')
@@ -52,10 +52,10 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
             Row(
               $.span.textLg.fontBold.h('Items'),
               Row(
-                $onClick(() => setFakeList([]))($LinkBtn.secondary, 'Clear'),
+                $onClick(() => setFakeList([]))($Btn.secondary, 'Clear'),
                 $onClick(() =>
                   setFakeList([...fakeList, random(100)(1000).toString()])
-                )($LinkBtn.primary, 'Add')
+                )($Btn.primary, 'Add')
               )
             ),
             $.div.mt_4.h(FlowWrap(toListItem)(...fakeList))

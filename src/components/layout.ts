@@ -1,7 +1,7 @@
-import { $, $$ } from '../output-styles'
+import { $, $$ } from '../tailwind-styles'
 import { ReactElement } from 'react'
 import { map } from 'lodash/fp'
-import BaseStyles from '../output-styles'
+import BaseStyles from '../tailwind-styles'
 
 export function FlowWrap<T>(mapper?: (item: T) => ReactElement) {
   return (...items: T[]) =>

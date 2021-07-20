@@ -1,5 +1,5 @@
-import { $$ } from '../output-styles'
-import BaseStyles from '../output-styles'
+import { $$ } from '../tailwind-styles'
+import BaseStyles from '../tailwind-styles'
 
 export default class Panel {
   constructor(private tag: string = 'section') {}

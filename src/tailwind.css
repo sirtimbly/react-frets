@@ -37,3 +37,15 @@ html {
   display: grid;
   grid-template-rows: 48px 1fr;
 }
+
+.content {
+  @apply text-gray-800
+}
+
+.content h1 {
+  @apply text-2xl
+}
+
+.content h2 {
+  @apply text-xl
+}

@@ -1,4 +1,4 @@
-import { $, $$ } from '../output-styles'
+import { $, $$ } from '../tailwind-styles'
 
 export function TextInput(field: {
   key: string
