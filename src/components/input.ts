@@ -17,7 +17,7 @@ export function TextInput(field: {
         .add(field.required && $$().fontBold.toString())
         .h(field.key),
       // $.input.bgGray_200.p_1.h({ type: "text", value: "something" })
-      $.input.flexGrow.w_2_3.BgWhite.border.roundedSm.borderGray_300.ml_2.p_1.textBlack.shadowInner
+      $.input.flexGrow.w_2_3._bgWhite.border.roundedSm.borderGray_300.ml_2.p_1.textBlack.shadowInner
         .add(
           !valid
             ? $$().bgRed_100.borderRed_500.textRed_600.border.toString()

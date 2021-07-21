@@ -29,7 +29,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts", "output-styles.ts",
+    "src/**/*.ts",
   ],
   "exclude": [
     "node_modules"

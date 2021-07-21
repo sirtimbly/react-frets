@@ -15,26 +15,13 @@ const src = subdir(opts.sourcedir || 'src/')
 const output = subdir(opts.outdir || 'build/')
 const staticDir = subdir(opts.staticdir || 'static/')
 const cssFilter = /\.css$/i
-const htmlFilter = /\.html$/i
 const buildOpts = {
   entry: src + 'index.ts',
   outfile: output + 'index.js',
   bundle: true,
-}
-
-if (opts.production) {
-  build({
-    ...buildOpts,
-    debug: false,
-    minify: true,
-  })
-} else {
-  build({
-    ...buildOpts,
-    debug: true,
-    sourcemap: true,
-    minify: false,
-  })
+  ...(opts.production
+    ? { debug: false, sourcemap: false, minify: true }
+    : { debug: true, sourcemap: true, minify: false }),
 }
 
 function copyToOutputFrom(srcDir: string = src) {
@@ -42,11 +29,14 @@ function copyToOutputFrom(srcDir: string = src) {
     file.copy(srcDir + filename, output + basename(filename))
 }
 
-function processStylesheet(filename) {
-  // send through frets-styles-generator first
-  runFretsStylesGenerator(filename, src)
-  // output the final css file
-  runPostcss(filename, output, opts.production)
+async function processStylesheet(filename) {
+  const time = new Date().getTime()
+  await runPostcss(filename, output, opts.production, src)
+  console.log(
+    `🎸 postcss processing on ${basename(filename)} took ${
+      new Date().getTime() - time
+    }ms`
+  )
 }
 
 scandir(staticDir).then((files) => {
@@ -54,10 +44,14 @@ scandir(staticDir).then((files) => {
   files.map(copyToOutputFrom(staticDir))
 })
 
-scandir(src, cssFilter).then((files) => {
-  console.log('🎸 Process CSS with Postcss and Frets Styles Generator', files)
-  files.map((file) => processStylesheet(src + file))
-})
+scandir(src, cssFilter)
+  .then((files) => {
+    console.log('🎸 Process CSS with Postcss and Frets Styles Generator', files)
+    return Promise.all(files.map((file) => processStylesheet(src + file)))
+  })
+  .finally(() => {
+    build(buildOpts)
+  })
 
 if (cliopts.watch) {
   console.log('🎸 Starting dev server in watch mode.')

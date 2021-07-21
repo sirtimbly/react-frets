@@ -8,8 +8,8 @@ import { FlowRowPack } from './components/layout'
 import { $Panel } from './components/panel'
 
 ReactDOM.render(
-  $.div.mxAuto.BgWhite.hFull.wFull.h(
-    $.div.p_3.BgBlack.textWhite.shadowLg.fontExtrabold.text_2xl.h(
+  $.div.mxAuto._bgWhite.hFull.wFull.h(
+    $.div.p_3._bgBlack.textWhite.shadowLg.fontExtrabold.text_2xl.h(
       'Frets with React'
     ),
     FlowRowPack((x) => $Panel.white.mr_1.w_1_3.content.h(x))(
