@@ -8,7 +8,7 @@ styleguide-static/**
 .cache
 public/maps/**
 .rpt2_cache
-
+.eslintcache
 # /dist
 storybook-static/**
 !storybook-static/css/*

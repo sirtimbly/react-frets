@@ -6,4 +6,46 @@
 
 a {
   @apply text-blue-600
+
+}
+
+.row-x {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.row-x > * {
+  @apply ml-2
+}
+
+.row-x > *:first-child {
+  @apply ml-0
+}
+
+#app {
+  display: flex;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+.outer-grid {
+  display: grid;
+  grid-template-rows: 48px 1fr;
+}
+
+.content {
+  @apply text-gray-900
+}
+
+.content h1 {
+  @apply text-3xl
+}
+
+.content h2 {
+  @apply text-2xl
 }

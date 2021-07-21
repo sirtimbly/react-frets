@@ -1,24 +1,33 @@
-import ReactDOM from "react-dom";
-import React, { useState, ReactElement } from "react";
-import { $, e } from "~output-styles";
-import { AppComponent } from "./app";
-import { md } from "./helpers/md";
+import ReactDOM from 'react-dom'
+// import React, { useState, ReactElement } from 'react'
+import { $ } from './tailwind-styles'
+import { AppComponent } from './app'
+import { md } from './helpers/md'
+
+import { FlowRowPack } from './components/layout'
+import { $Panel } from './components/panel'
 
 ReactDOM.render(
-  $.div.container.mxAuto.bgWhite.shadow.h(
-    $.div.p_3.bgBlack.textWhite.fontExtrabold.textCenter.text_4xl.h(
-      "Frets with React"
+  $.div.mxAuto._bgWhite.hFull.wFull.h(
+    $.div.p_3._bgBlack.textWhite.shadowLg.fontExtrabold.text_2xl.h(
+      'Frets with React'
     ),
-    $.div.flexRow.justifyAround.p_4.h(md`
+    FlowRowPack((x) => $Panel.white.mr_1.w_1_3.content.h(x))(
+      md`
+# About This
+
 Using _Frets_ hyperscript functions instead of JSX for imperative and clean UI rendering code.
 [Visit the repo](https://github.com/sirtimbly/react-frets).
-    `),
-    $.div.mt_2.p_3.h(
-      e(AppComponent, {
-        fancyName: "oohlahah",
-        isVisible: true,
-      })
+
+Open <code>src/index.ts</code> to see how to change the application layout. Styles are mostly utility classes provided by [tailwind](https://tailwindcss.com). Production code uses purge-css to minimize file size.
+      `,
+      $.div.p_1.h(
+        AppComponent({
+          fancyName: 'A Simple Demo App',
+          isVisible: true,
+        })
+      )
     )
   ),
-  document.getElementById("app")
-);
+  document.getElementById('app')
+)
