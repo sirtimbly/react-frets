@@ -11,15 +11,15 @@ import { runPostcss, subdir } from './helpers'
 const [opts] = cliopts.parse(
   ['p, production', 'Creates a production build.'],
   ['o, outdir', 'Output directory, defaults to `build/`'],
-  ['s, sourcedir', 'Output directory, defaults to `src/`'],
-  ['t, staticdir', 'Static file directory, defaults to `static/`']
+  ['s, sourcedir', 'Output directory, defaults to `src/`']
 )
 
 // set up all the directories we want to work in
 const src = subdir(opts.sourcedir || 'src/')
 const output = subdir(opts.outdir || 'build/')
-const staticDir = subdir(opts.staticdir || 'static/')
+const staticDir = subdir('static/')
 const cssFilter = /\.css$/i
+const staticFilter = /\.html$/i
 
 // the es-build options we will apply to your typescript
 const buildOpts: BuildConfig = {
@@ -52,12 +52,16 @@ async function processStylesheet(filename: string) {
  */
 
 // this can run in parallel with the rest of the build
-scandir(staticDir).then((staticFiles) => {
-  console.log('🎸 Copy Static files')
-  staticFiles.map((filename: string) =>
-    file.copy(staticDir + filename, output + basename(filename))
-  )
-})
+scandir(staticDir, staticFilter)
+  .then((staticFiles) => {
+    console.log('🎸 Found static files', staticFiles)
+    return Promise.all(
+      staticFiles.map((filename: string) =>
+        file.copy(staticDir + filename, output + basename(filename))
+      )
+    )
+  })
+  .then(() => console.log('🎸 Finished Copying Static files'))
 
 /**
  * Build and Transpile Sources
@@ -69,7 +73,10 @@ scandir(staticDir).then((staticFiles) => {
  */
 scandir(src, cssFilter)
   .then((files) => {
-    console.log('🎸 Process CSS with Postcss and Frets Styles Generator', files)
+    console.log(
+      '🎸 Start processing CSS with Postcss and Frets Styles Generator',
+      files
+    )
     return Promise.all(files.map((file) => processStylesheet(src + file)))
   })
   .finally(() => {
