@@ -20,6 +20,7 @@ module.exports = {
         'bg-white',
         'bg-black',
         /^mt-/,
+        /^m*-/,
         /^w-/,
         /^h-/,
         // /^inset-/,

@@ -1,4 +1,5 @@
 import { $, $$ } from '../tailwind-styles'
+import { ReactElement } from 'react'
 
 export function TextInput(field: {
   key: string
@@ -8,16 +9,15 @@ export function TextInput(field: {
   isDirty?: () => boolean
   validate?: () => boolean
   validationErrors?: string[]
-}) {
+}): ReactElement {
   const valid = !(field.validationErrors && field.validationErrors.length)
   return $.div.h(
     { key: field.key },
     $.label.flex.itemsCenter.flexRow.my_2.h(
       $.div.flexGrow.w_1_3
-        .add(field.required && $$().fontBold.toString())
+        .add(field.required && $$().fontBold.textBlack.toString())
         .h(field.key),
-      // $.input.bgGray_200.p_1.h({ type: "text", value: "something" })
-      $.input.flexGrow.w_2_3._bgWhite.border.roundedSm.borderGray_300.ml_2.p_1.textBlack.shadowInner
+      $.input.flexGrow.w_2_3.bgWhite.border.roundedSm.borderGray_300.ml_2.p_1.textBlack.shadowInner
         .add(
           !valid
             ? $$().bgRed_100.borderRed_500.textRed_600.border.toString()

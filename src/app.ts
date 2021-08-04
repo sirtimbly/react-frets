@@ -1,18 +1,14 @@
-import React, { PropsWithChildren, useState, ReactElement } from 'react'
-import { map, random, uniqueId, head, tail } from 'lodash/fp'
+import React, { PropsWithChildren, useState } from 'react'
+import { random, uniqueId } from 'lodash/fp'
 import { $, $$, e, $onClick, $formOnSubmit } from './tailwind-styles'
-import { $Btn, $Button, $LinkBtn } from './components/buttons'
+import { $Btn } from './components/buttons'
 import { TextInput } from './components/input'
 
 import { $Panel } from './components/panel'
-import { FlowCol } from './components/layout'
-import { FlowRowPack, FlowRowSpread, FlowWrap, Row } from './components/layout'
-interface AppProps extends PropsWithChildren<any> {
-  fancyName: string
-  isVisible: boolean
-}
+import { FlowWrap, Row } from './components/layout'
+type AppProps = PropsWithChildren<{ fancyName: string; isVisible: boolean }>
 
-const listItem = $$().div.mr_2.mb_2.bgYellow_700.textWhite.p_2.text_2xl
+const listItem = $$().div.mr_2.mb_2.bgPink_500.textWhite.p_2.text_2xl
 const toListItem = (val: string) => listItem.h({ key: uniqueId(val) }, val)
 
 export const app: React.FunctionComponent<AppProps> = (props) => {
@@ -29,17 +25,19 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
       validationErrors: [],
     }
   }
-  console.log('🚀 rendering the app component')
+
   return $.div.flex.flexCol.h(
-    $.header.textCenter.textGray_600.text_2xl.h(props.fancyName),
+    props.isVisible
+      ? $.header.textCenter.textBlue_700.text_2xl.h(props.fancyName)
+      : '',
     $Panel.light.maxWMd.shadowLg.selfCenter
       .hide(showList)
       .h(
         $formOnSubmit(() =>
           setShowList(true)
         ).flex.flexCol.itemsStretch.textGray_500.h(
-          TextInput(registerField('Username')),
-          TextInput(registerField('Password')),
+          TextInput(registerField('Username', '', true)),
+          TextInput(registerField('Password', '', true)),
           $Btn.primary.mt_2.h('Log In')
         )
       ),
@@ -59,9 +57,12 @@ export const app: React.FunctionComponent<AppProps> = (props) => {
               )
             ),
             $.div.mt_4.h(FlowWrap(toListItem)(...fakeList))
-          )
+          ),
+        $onClick(() => setShowList(false))($Btn.tertiary, 'Logout')
       )
   )
 }
 
-export const AppComponent = (props: AppProps) => e(app, props)
+export const AppComponent = (
+  props: AppProps
+): React.FunctionComponentElement<AppProps> => e(app, props)

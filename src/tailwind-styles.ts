@@ -876,7 +876,7 @@ get grid() { return this.add("grid"); }
 get inlineGrid() { return this.add("inline-grid"); }
 get contents() { return this.add("contents"); }
 get listItem() { return this.add("list-item"); }
-get _hidden() { return this.add("hidden"); }
+get hidden() { return this.add("hidden"); }
 get h_0() { return this.add("h-0"); }
 get h_1() { return this.add("h-1"); }
 get h_2() { return this.add("h-2"); }
@@ -1911,8 +1911,8 @@ get hoverBorderOpacity_95() { return this.add("hover\:border-opacity-95"); }
 get hoverBorderOpacity_100() { return this.add("hover\:border-opacity-100"); }
 get bgTransparent() { return this.add("bg-transparent"); }
 get bgCurrent() { return this.add("bg-current"); }
-get _bgBlack() { return this.add("bg-black"); }
-get _bgWhite() { return this.add("bg-white"); }
+get bgBlack() { return this.add("bg-black"); }
+get bgWhite() { return this.add("bg-white"); }
 get bgGray_50() { return this.add("bg-gray-50"); }
 get bgGray_100() { return this.add("bg-gray-100"); }
 get bgGray_200() { return this.add("bg-gray-200"); }
@@ -2953,7 +2953,7 @@ get uppercase() { return this.add("uppercase"); }
 get lowercase() { return this.add("lowercase"); }
 get capitalize() { return this.add("capitalize"); }
 get normalCase() { return this.add("normal-case"); }
-get _italic() { return this.add("italic"); }
+get italic() { return this.add("italic"); }
 get notItalic() { return this.add("not-italic"); }
 get ordinal() { return this.add("ordinal"); }
 get slashedZero() { return this.add("slashed-zero"); }
@@ -3182,7 +3182,7 @@ get hoverTextOpacity_80() { return this.add("hover\:text-opacity-80"); }
 get hoverTextOpacity_90() { return this.add("hover\:text-opacity-90"); }
 get hoverTextOpacity_95() { return this.add("hover\:text-opacity-95"); }
 get hoverTextOpacity_100() { return this.add("hover\:text-opacity-100"); }
-get _underline() { return this.add("underline"); }
+get underline() { return this.add("underline"); }
 get lineThrough() { return this.add("line-through"); }
 get noUnderline() { return this.add("no-underline"); }
 get hoverUnderline() { return this.add("hover\:underline"); }

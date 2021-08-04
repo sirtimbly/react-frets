@@ -2,8 +2,7 @@
 import { BuildConfig } from 'estrella'
 import { build, cliopts, scandir, file, watch, basename } from 'estrella'
 
-import liveServer from 'live-server'
-
+import { createServer } from 'serve-http'
 import { runPostcss, subdir } from './helpers'
 
 // for configuring this script's command line arguments, see also
@@ -83,9 +82,11 @@ scandir(src, cssFilter)
     // Run es-build on our typescript source, watch mode is built in
     if (cliopts.watch) {
       console.log('🎸 Starting dev server.')
-      liveServer.start({
-        port: process.env.PORT || 8181,
-        root: output,
+      createServer({
+        port: Number(process.env.PORT) || 8181,
+        public: true,
+        livereload: true,
+        pubdir: output,
       })
       console.log('🎸 Watching for file changes.')
       watch(src, { filter: cssFilter }, (changes) => {
