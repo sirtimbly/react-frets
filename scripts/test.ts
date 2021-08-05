@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { BuildConfig } from 'estrella'
 import { build, glob, cliopts, scandir, file, watch, basename } from 'estrella'
 import { spawnSync, spawn, exec, execSync } from 'child_process'
@@ -21,8 +22,8 @@ const testOutputDir = 'build/_tests/'
     bundle: false,
     debug: true,
     sourcemap: true,
+    incremental: true,
     minify: false,
-    silent: true,
     tslint: 'off',
     onEnd: startTests,
   }
