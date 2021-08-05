@@ -22,6 +22,6 @@
     },
     "lib": ["es5", "es6", "dom", "dom.iterable", "es2015.promise"]
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }

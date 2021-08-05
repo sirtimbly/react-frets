@@ -10,8 +10,8 @@ const testOutputDir = 'build/_tests/'
  */
 !(async function () {
   await Rimraf.sync(testOutputDir + '*')
-  const files = glob('src/**/*.ts').concat(glob('tests/**/*.ts'))
-
+  const files = glob('src/**/*.ts*').concat(glob('tests/**/*.ts'))
+  // console.log('files', files)
   // the es-build options we will apply to your typescript
   const buildOpts: BuildConfig = {
     entry: files,
