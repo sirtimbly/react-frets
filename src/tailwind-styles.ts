@@ -1068,9 +1068,6 @@ get tableAuto() { return this.add("table-auto"); }
 get tableFixed() { return this.add("table-fixed"); }
 get borderCollapse() { return this.add("border-collapse"); }
 get borderSeparate() { return this.add("border-separate"); }
-get transform() { return this.add("transform"); }
-get transformGpu() { return this.add("transform-gpu"); }
-get transformNone() { return this.add("transform-none"); }
 get originCenter() { return this.add("origin-center"); }
 get originTop() { return this.add("origin-top"); }
 get originTopRight() { return this.add("origin-top-right"); }
@@ -1080,6 +1077,9 @@ get originBottom() { return this.add("origin-bottom"); }
 get originBottomLeft() { return this.add("origin-bottom-left"); }
 get originLeft() { return this.add("origin-left"); }
 get originTopLeft() { return this.add("origin-top-left"); }
+get transform() { return this.add("transform"); }
+get transformGpu() { return this.add("transform-gpu"); }
+get transformNone() { return this.add("transform-none"); }
 get translateX_0() { return this.add("translate-x-0"); }
 get translateX_1() { return this.add("translate-x-1"); }
 get translateX_2() { return this.add("translate-x-2"); }
@@ -1563,6 +1563,7 @@ get selfStart() { return this.add("self-start"); }
 get selfEnd() { return this.add("self-end"); }
 get selfCenter() { return this.add("self-center"); }
 get selfStretch() { return this.add("self-stretch"); }
+get selfBaseline() { return this.add("self-baseline"); }
 get justifySelfAuto() { return this.add("justify-self-auto"); }
 get justifySelfStart() { return this.add("justify-self-start"); }
 get justifySelfEnd() { return this.add("justify-self-end"); }
